@@ -17,6 +17,7 @@ class Server {
   rutas () {
     this.app.get('/', (req, res) => res.send('Hello World!'))
     this.app.use('/api/v1/empleados', require('../routes/empleados'))
+    this.app.use('/api/v1/peliculas', require('../routes/peliculas'))
   }
 
   listen () {
