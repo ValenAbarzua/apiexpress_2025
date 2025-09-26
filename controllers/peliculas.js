@@ -22,6 +22,36 @@ const getPeliculasId = (req = request, res= response) => {
         })
     })
 }
+
+//Listado de peliculas
+const getPeliculasPopulares = (req = request, res = response) => {
+    const {page=1} = req.query
+    const params = new URLSearchParams ()
+    params.append('api_key', process.env.API_KEY)
+    params.append('language', 'es-ES')
+    params.append('page', page)
+
+    const url = `${URL}/movie/popular?${params.toString()}`
+    axios.get(url)
+    .then((response) => {
+        const data = response.data.results
+
+        res.status(200).json({
+            msg: 'Ok',
+            code: 200,
+            data
+        })
+    })
+    .catch((e) => {
+        res.status(500).json({
+            msg: `Error: ${e}`,
+            code: 500
+        })
+    })
+
+}
+
 module.exports = {
-    getPeliculasId
+    getPeliculasId,
+    getPeliculasPopulares
 }
