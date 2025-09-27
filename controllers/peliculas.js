@@ -87,8 +87,72 @@ const getPeliculasTitulo = (req = request, res = response) => {
 
 }
 
+// Listado de géneros
+const getGeneros = (req = request, res = response) => {
+  const params = new URLSearchParams()
+  params.append('api_key', process.env.API_KEY)
+  params.append('language', 'es-ES')
+
+  const url = `${URL}/genre/movie/list?${params.toString()}`
+
+  axios.get(url)
+    .then((response) => {
+      const data = response.data.genres
+
+      res.status(200).json({
+        msg: 'Ok',
+        code: 200,
+        data
+      })
+    })
+    .catch((e) => {
+      res.status(500).json({
+        msg: `Error: ${e}`,
+        code: 500
+      })
+    })
+}
+
+
+//Buscar pelicula por su genero
+const getPeliculasGenero = (req = request, res = response) => {
+    const {with_genres} = req.query
+    if (!with_genres) {
+        return res.status(400).json({
+            msg: 'Tienes que enviar un parametro ?with_genres= ',
+            code: 400
+        })
+    }
+
+    const params = new URLSearchParams
+    params.append('api_key', process.env.API_KEY)
+    params.append('language', 'es-ES')
+    params.append('with_genres', with_genres)
+
+    const url = `${URL}/discover/movie?${params.toString()}`
+
+    axios.get(url)
+    .then((response) => {
+        const data = response.data.results
+
+        res.status(200).json({
+            msg: 'Ok',
+            code: 200,
+            data
+        })
+    })
+    .catch((e) => {
+        res.status(500).json({
+            msg: `Error: ${e}`,
+            code: 500
+        })
+    })
+}
+
 module.exports = {
     getPeliculasId,
     getPeliculasPopulares,
-    getPeliculasTitulo
+    getPeliculasTitulo,
+    getGeneros,
+    getPeliculasGenero
 }
